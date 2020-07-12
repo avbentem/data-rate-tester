@@ -1,0 +1,6 @@
+.idea
+.pio
+CMakeListsPrivate.txt
+cmake-build-*/
+# Ensure only include/config-example.h is included:
+include/config.h

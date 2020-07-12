@@ -1,0 +1,10 @@
+---
+Language: Cpp
+BasedOnStyle: LLVM
+AlignTrailingComments: false
+AllowShortFunctionsOnASingleLine: Empty
+ColumnLimit: 100
+IndentCaseLabels: true
+# LMIC requires `#include <lmic/...>` before `#include <hal/hal.h>`
+SortIncludes: false
+...
