@@ -1,8 +1,8 @@
-#include <sys/cdefs.h>
 /**
  * A logger that, for its `log` and `logf` methods, prefixes each log entry with the LMIC ticks and
  * the number of seconds since boot.
  */
+#include <sys/cdefs.h>
 #include "logger.h"
 
 // Global singleton instance to invoke the constructor; not used directly as all methods are static

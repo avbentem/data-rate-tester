@@ -1,7 +1,7 @@
 #ifndef DATA_RATE_TESTER_DISPLAY_H
 #define DATA_RATE_TESTER_DISPLAY_H
 
-#include <Wire.h>
+#include "Wire.h"
 #include "SSD1306Wire.h"
 
 enum State { STATE_WAITING, STATE_TX, STATE_RX1, STATE_RX2, STATE_RXDONE, STATE_NOP };
