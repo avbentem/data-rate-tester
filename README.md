@@ -25,7 +25,7 @@ A single button is used for control:
 
 - Press once to skip to the next data rate.
 
-- Press twice to toggle confirmed/unconfirmed uplinks. An asterix after the data rate indicates
+- Press twice to toggle confirmed/unconfirmed uplinks. An asterisk after the data rate indicates
   that confirmed uplinks are enabled.
 
 - Long press to toggle between automatic cycling through the predefined list of data rates, and
@@ -36,24 +36,24 @@ A single button is used for control:
 The above photo shows:
 
 - `#15 [SF8]* 867.1`
-  - `#15`: next uplink will use frame counter is 25
-  - `SF8`: next uplink will use spreading factor is SF8
-  - `[..]`: manual mode is active; subsequent uplinks will also use SF8
-  - `*`: confirmed uplinks are active
-  - `867.1`: next uplink will use 867.1 MHz
+  - `#15` - next uplink will use frame counter 25
+  - `SF8` - next uplink will use spreading factor SF8
+  - `[..]` - manual mode is active; subsequent uplinks will also use SF8
+  - `*` - confirmed uplinks are active
+  - `867.1` - next uplink will use 867.1 MHz
 
 - `tx in 4.9 sec`: the countdown progress bar, showing how much waiting time is left, to comply
   with the maximum duty cycle regulations
 
 - `#26/19 SF8 rx1 ack`
-  - `#26/19`: the last downlink counter was 26, and was received after uplink 19 (the downlink
+  - `#26/19` - the last downlink counter was 26, and was received after uplink 19 (the downlink
     counter being larger than the uplink counter implies that the device was restarted without
     resetting the counters in TTN Console, and also implies that apparently the frame counter
     security was disabled in TTN Console)
-  - `SF8`: uplink 19 was sent using SF8
-  - `rx1`: downlink 26 was received in RX1 (hence for EU868 was using the same SF as the uplink; if
+  - `SF8` - uplink 19 was sent using SF8
+  - `rx1` - downlink 26 was received in RX1 (hence for EU868 was using the same SF as the uplink; if
     it was received in RX2 then for EU868 it would have used SF9) 
-  - `ack`: the downlink had its FCtrl.ACK bit set
+  - `ack` - the downlink had its FCtrl.ACK bit set
 
 For an actual application-level downlink, the downlink data will be shown at the bottom as well.
 
