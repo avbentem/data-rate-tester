@@ -16,10 +16,12 @@
 bool isConfirmed = false;
 bool isAutoDataRate = true;
 
-// The order in which to cycle through data rates if isAutoDataRate == true. SF7 is repeated a few
-// times in between the slower data rates as well, to limit waiting time. Assume EU868:
-static const uint8_t dataRates[] = {DR_SF7, DR_SF8,  DR_SF9, DR_SF7,  DR_SF12, DR_SF7,
-                                    DR_SF7, DR_SF11, DR_SF7, DR_SF10, DR_SF7};
+// The order in which to cycle through data rates if isAutoDataRate == true. This order prioritizes
+// testing the better data rates, while balancing the waiting time between uplinks, and while still
+// allowing for quickly switching to manual mode after starting. This does not test DR_SF7B (known
+// as DR6, SF7BW250) nor FSK, which will both be short range anyhow. Assume EU868;
+static const uint8_t dataRates[] = {DR_SF7, DR_SF8,  DR_SF9, DR_SF7, DR_SF12, DR_SF7,
+                                    DR_SF8, DR_SF10, DR_SF8, DR_SF9, DR_SF11, DR_SF7};
 
 // The running index of the next data rate in array `dataRates`, if isAutoDataRate == true
 int8_t dataRateIdx = -1;

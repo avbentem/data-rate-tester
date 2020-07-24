@@ -1,6 +1,6 @@
 # LoRaWAN EU868 Data Rate Tester
 
-Tests LoRaWAN uplinks by quickly cycling through different data rates, (ab)using the EU868 maximum
+Test LoRaWAN uplinks by quickly cycling through different data rates, (ab)using the EU868 maximum
 duty cycle, optionally using confirmed uplinks to also test downlinks (but without actually retrying
 if no confirmation is received), and always using the maximum transmission power.
 
@@ -9,9 +9,9 @@ if no confirmation is received), and always using the maximum transmission power
 :warning: Regional maximum duty cycle regulations may not be the only limitation that applies. For
 The Things Network, 30 seconds uplink and 10 downlinks per day apply for its Fair Access Policy.
 
-:warning: This is REALLY just a quick & dirty sketch: the code to display the timers and to disable
-the auto-retry for confirmed uplinks is mostly trial & error, hence may rely on internals of a
-specific LMIC version. It is not a good base for further development.
+:warning: The code to display the timers and to disable the auto-retry for confirmed uplinks is
+mostly trial & error and very much relies on internals of a specific LMIC version. It is not a good
+base for further development.
 
 ## Usage
 
@@ -33,27 +33,48 @@ A single button is used for control:
   (Changing this mode after a transmission, while awaiting the receive windows for a confirmed
   uplink, may yield the wrong uplink details to be displayed with the downlink.)
 
-The above photo shows:
+The predefined list cycles through SF7, SF8, SF9, SF7, SF12, SF7, SF8, SF10, SF8, SF9, SF11, SF7.
+This order prioritizes testing the better data rates, while balancing the waiting time between
+uplinks, and while still allowing for quickly switching to manual mode after starting:
 
-- `#15 [SF8]* 867.1`
-  - `#15` - next uplink will use frame counter 25
-  - `SF8` - next uplink will use spreading factor SF8
-  - `[..]` - manual mode is active; subsequent uplinks will also use SF8
-  - `*` - confirmed uplinks are active
-  - `867.1` - next uplink will use 867.1 MHz
+     SF7 ∎
+     SF8 ∎∎
+     SF9 ∎∎∎∎
+     SF7 ∎
+    SF12 ∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎
+     SF7 ∎
+     SF8 ∎∎
+    SF10 ∎∎∎∎∎∎∎∎
+     SF8 ∎∎
+     SF9 ∎∎∎∎
+    SF11 ∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎
+     SF7 ∎
 
-- `tx in 4.9 sec`: the countdown progress bar, showing how much waiting time is left, to comply
-  with the maximum duty cycle regulations
+    Airtime (hence duty cycle waiting time)
+
+This does not test DR6 (SF7BW250) nor FSK, which will both be short range anyhow.
+
+[The photo](./doc/device.png) further above above shows:
+
+- `#20 [SF8]* 867.1`
+  - `#20` - next uplink will use frame counter 20.
+  - `SF8` - next uplink will use data rate SF8BW125.
+  - `[..]` - manual mode is active; subsequent uplinks will also use SF8BW125.
+  - `*` - confirmed uplinks are active.
+  - `867.1` - next uplink will use 867.1 MHz.
+
+- `tx in 4.9 sec` - the countdown progress bar, showing how much waiting time is left, to only
+  comply with (or: to _abuse_) the maximum duty cycle regulations.
 
 - `#26/19 SF8 rx1 ack`
-  - `#26/19` - the last downlink counter was 26, and was received after uplink 19 (the downlink
+  - `#26/19` - the last downlink counter was 26, and was received after uplink 19. The downlink
     counter being larger than the uplink counter implies that the device was restarted without
     resetting the counters in TTN Console, and also implies that apparently the frame counter
-    security was disabled in TTN Console)
-  - `SF8` - uplink 19 was sent using SF8
+    security was disabled in TTN Console.
+  - `SF8` - uplink 19 was sent using SF8BW125.
   - `rx1` - downlink 26 was received in RX1 (hence for EU868 was using the same SF as the uplink; if
-    it was received in RX2 then for EU868 it would have used SF9) 
-  - `ack` - the downlink had its FCtrl.ACK bit set
+    it was received in RX2 then for EU868 it would have used SF9BW125).
+  - `ack` - the downlink had its FCtrl.ACK bit set.
 
 For an actual application-level downlink, the downlink data will be shown at the bottom as well.
 
@@ -64,7 +85,7 @@ WiFi LoRa 32" board, for EU868, on [PlatformIO][pio] 4.3.4.
 
 [pio]: https://platformio.org/
 
-- Connect a button to `GND` and `IO0` (or use the program button).
+- Connect a button to `GND` and `IO0` (or use the on-board program button).
 
 - Register an ABP device. You probably want to disable frame counter security in TTN Console. Beware
   that such only applies to the uplink counters that are accepted by TTN; the downlink counters will
@@ -72,8 +93,8 @@ WiFi LoRa 32" board, for EU868, on [PlatformIO][pio] 4.3.4.
   running, you may see that LMIC ignores downlinks that have a counter that's not greater than its
   last known value.
 
-- Copy [`include/config-example.h`](include/config-example.h) into a file `config.h` and configure
-  the LoRaWAN ABP settings.
+- Copy [`include/config-example.h`](include/config-example.h) into a new file `config.h` and
+  configure the LoRaWAN ABP settings.
 
 - When not using EU868, or when not using The Things Network:
 
