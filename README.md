@@ -37,6 +37,7 @@ The predefined list cycles through SF7, SF8, SF9, SF7, SF12, SF7, SF8, SF10, SF8
 This order prioritizes testing the better data rates, while balancing the waiting time between
 uplinks, and while still allowing for quickly switching to manual mode after starting:
 
+         Airtime (hence duty cycle waiting time)
      SF7 ∎
      SF8 ∎∎
      SF9 ∎∎∎∎
@@ -49,8 +50,6 @@ uplinks, and while still allowing for quickly switching to manual mode after sta
      SF9 ∎∎∎∎
     SF11 ∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎
      SF7 ∎
-
-    Airtime (hence duty cycle waiting time)
 
 This does not test DR6 (SF7BW250) nor FSK, which will both be short range anyhow.
 

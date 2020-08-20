@@ -453,13 +453,15 @@ void setupLMIC() {
   // each uplink)
   LMIC_setDrTxpow(SF7, 14);
 
-  // Beware that RX1 may fail while RX2 works fine. Like for the Heltec WiFi LoRa 32 board used for
-  // testing, RX2 in EU868 (using SF9) seems to work with the standard settings, but RX1 for SF8
-  // needs 2%, while RX1 for SF7 even needs 5% of the maximum error.
+  // Make LMIC start its RX windows a bit earlier, and listen longer, to compensate for inaccurate
+  // timing. Beware that a specific value may work for a slow data rate, but not for faster ones,
+  // and remember that RX1 may use different data rates than RX2. Like for the Heltec WiFi LoRa 32
+  // board used for testing, RX2 in EU868 (using SF9) worked with the standard settings, but RX1 for
+  // SF8 needed 2%, while RX1 for SF7 even needed 5% of the maximum error.
   //
-  // For corrections larger than 0.4% this needs `LMIC_ENABLE_arbitrary_clock_error`; see
-  // https://github.com/mcci-catena/arduino-LMIC/blob/master/README.md#LMIC_setclockerror
-  LMIC_setClockError((MAX_CLOCK_ERROR * 5) / 100);
+  // For corrections larger than 0.4% (0.4/100) this also needs LMIC_ENABLE_arbitrary_clock_error;
+  // see https://github.com/mcci-catena/arduino-LMIC/blob/master/README.md
+  LMIC_setClockError(MAX_CLOCK_ERROR * 5 / 100);
 }
 
 void setup() {
