@@ -86,11 +86,30 @@ WiFi LoRa 32" board, for EU868, on [PlatformIO][pio] 4.3.4.
 
 - Connect a button to `GND` and `IO0` (or use the on-board program button).
 
-- Register an ABP device. You probably want to disable frame counter security in TTN Console. Beware
-  that such only applies to the uplink counters that are accepted by TTN; the downlink counters will
-  still increase endlessly, until manually resetting those. When resetting while this sketch is
-  running, you may see that LMIC ignores downlinks that have a counter that's not greater than its
-  last known value.
+- Register an ABP device. For TTN Console V3 you will need to be explicit 
+  [about channels preset in the device][preset]. This depends on your hardware and has been tested
+  with the settings below. You probably also want to disable frame counter security.
+
+  [preset]: https://www.thethingsnetwork.org/forum/t/why-is-my-abp-device-not-seen-in-v3/53300/10
+
+  In TTN Console V3, in the device's General settings, Network layer:
+
+  - Frequency plan: _Europe 863-870 MHz (SF9 for RX2 - recommended)_
+  - LoRaWAN version: _MAC V1.0.2_
+  - Regional Parameters version: _PHY V1.0.2 REV B_
+  - Advanced MAC settings:
+    - Frame counter width: _32 bits_ (default)
+    - RX1 Delay: _1 second_ (default)
+    - RX1 Data Rate Offset: _0_ (default)
+    - Reset Frame Counters: _enabled_ (at least for _MAC V1.0.2_ along with _PHY V1.0.2 REV B_
+      this [also resets the downlink counter][downlink] as used by TTN, when it detects that the
+      uplink counter was reset)
+    - RX2 Data Rate Index: _3_ (default)
+    - RX2 Frequency: _869525000_ (default)
+    - Factory Preset Frequencies: _868100000_, _868300000_, _868500000_, _867100000_, _867300000_,
+      _867500000_, _867700000_, _867900000_
+
+    [downlink]: https://www.thethingsnetwork.org/forum/t/how-to-reset-frame-counter-on-v3/47884/6
 
 - Copy [`include/config-example.h`](include/config-example.h) into a new file `config.h` and
   configure the LoRaWAN ABP settings.
